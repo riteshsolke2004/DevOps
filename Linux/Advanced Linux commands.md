@@ -1,3 +1,303 @@
+🐧 AWK Command Cheat Sheet
+🔹 What is awk?
+
+awk = A text processing tool in Linux.
+
+Works on patterns and actions:
+
+awk 'pattern { action }' file
+
+
+$0 = whole line, $1 = 1st column, $2 = 2nd column, etc.
+
+🔹 Basic Usage
+1. Print entire file
+awk '{print}' file.txt
+
+2. Print the first column
+awk '{print $1}' file.txt
+
+3. Print multiple columns (1st & 3rd)
+awk '{print $1, $3}' file.txt
+
+4. Print line numbers with content
+awk '{print NR, $0}' file.txt
+
+
+NR → line number
+
+🔹 Filtering
+5. Print lines containing a word
+awk '/error/ {print}' logfile.log
+
+6. Print lines where column 2 > 50
+awk '$2 > 50 {print $0}' data.txt
+
+7. Print lines where column 3 = "yes"
+awk '$3 == "yes" {print $0}' data.txt
+
+🔹 Arithmetic
+8. Add all numbers in column 2
+awk '{sum += $2} END {print sum}' data.txt
+
+9. Average of column 3
+awk '{sum += $3} END {print sum/NR}' data.txt
+
+10. Multiply two columns
+awk '{print $1 * $2}' data.txt
+
+🔹 Built-in Variables
+Variable	Meaning
+$0	Whole line
+$1,$2	1st, 2nd column
+NR	Current line number
+NF	Number of fields in line
+FS	Field separator (default = space)
+OFS	Output field separator
+RS	Record separator (default = newline)
+11. Print number of columns in each row
+awk '{print NF}' file.txt
+
+12. Change field separator (CSV file)
+awk -F, '{print $1,$2}' file.csv
+
+13. Change output field separator
+awk 'BEGIN {OFS=" - "} {print $1,$2}' file.txt
+
+🔹 Advanced
+14. Print only the first 3 lines
+awk 'NR < 4 {print}' file.txt
+
+15. Skip header row (start from 2nd line)
+awk 'NR > 1 {print}' file.txt
+
+16. Print last column of each row
+awk '{print $NF}' file.txt
+
+17. Replace a word (foo → bar)
+awk '{gsub("foo","bar"); print}' file.txt
+
+18. Print only unique values from 1st column
+awk '!seen[$1]++' file.txt
+
+🔹 With BEGIN & END
+19. Print header + data
+awk 'BEGIN {print "Name Age"} {print $1,$2}' file.txt
+
+20. Print total number of lines
+awk 'END {print NR}' file.txt
+
+21. Print sum with header
+awk 'BEGIN {sum=0} {sum += $2} END {print "Total:", sum}' file.txt
+
+
+✅ DevOps Use Cases:
+
+Log filtering (kubectl logs | awk ...)
+
+CSV/JSON parsing
+
+Quick reporting from configs
+
+Automating data cleanup
+
+Would you like me to merge this AWK cheat sheet into the big Linux Commands README.md file I started for you earlier, so you get one master guide?
+
+You said:
+SED
+ChatGPT said:
+
+Nice pick 🔥 — after awk, the other giant in Linux text processing is sed.
+Let’s build you a full SED Cheat Sheet with explanations and examples.
+
+🐧 SED Command Cheat Sheet
+🔹 What is sed?
+
+sed = Stream EDitor
+
+Used to search, find, replace, delete, and transform text in files.
+
+Works line by line, great for automation.
+
+Basic syntax:
+
+sed 'command' filename
+
+🔹 Basic Usage
+1. Print file (default behavior)
+sed '' file.txt
+
+2. Replace first occurrence of "foo" with "bar"
+sed 's/foo/bar/' file.txt
+
+3. Replace all occurrences of "foo" with "bar"
+sed 's/foo/bar/g' file.txt
+
+4. Replace only on line 3
+sed '3s/foo/bar/' file.txt
+
+5. Replace between lines 2 and 5
+sed '2,5s/foo/bar/g' file.txt
+
+🔹 Deleting
+6. Delete line 2
+sed '2d' file.txt
+
+7. Delete lines 2–5
+sed '2,5d' file.txt
+
+8. Delete all empty lines
+sed '/^$/d' file.txt
+
+🔹 Printing
+9. Print only line 3
+sed -n '3p' file.txt
+
+10. Print lines 5 to 10
+sed -n '5,10p' file.txt
+
+11. Print lines matching "error"
+sed -n '/error/p' logfile.log
+
+🔹 In-Place Editing
+12. Replace text inside the file directly
+sed -i 's/foo/bar/g' file.txt
+
+13. Backup original before replacing
+sed -i.bak 's/foo/bar/g' file.txt
+
+🔹 Advanced Usage
+14. Replace only the second occurrence on each line
+sed 's/foo/bar/2' file.txt
+
+15. Replace on lines starting with "Error"
+sed '/^Error/s/foo/bar/' file.txt
+
+16. Insert a line before line 3
+sed '3i\This is a new line' file.txt
+
+17. Append a line after line 3
+sed '3a\This is appended' file.txt
+
+18. Change line 2 completely
+sed '2c\This is the new content' file.txt
+
+19. Replace with environment variable (bash expansion)
+sed "s/foo/$USER/" file.txt
+
+20. Multiple commands in one go
+sed -e 's/foo/bar/g' -e 's/yes/no/g' file.txt
+
+🔹 Common DevOps Use Cases
+
+Mass config edits (sed -i 's/dev/prod/g' config.yaml)
+
+Remove unwanted lines from logs
+
+Add headers/footers to files
+
+Automate replacements in Dockerfiles, YAML, JSON
+
+👉 Think of awk as "Excel formulas for text" and sed as "Find & Replace on steroids".
+
+Do you want me to also merge AWK + SED into your Linux Commands README.md (the big file we’re building), so you’ll have a single master DevOps Linux guide?
+
+You said:
+grep 
+ChatGPT said:
+
+Ahh perfect 🐧 — you’ve asked about grep, which is literally one of the most-used commands in Linux for DevOps, SRE, and debugging.
+
+🔎 GREP Command Cheat Sheet
+🔹 What is grep?
+
+grep = Global Regular Expression Print
+
+Used to search for patterns/strings in files or output.
+
+Supports regex, making it super powerful.
+
+Basic syntax:
+
+grep [options] pattern filename
+
+🔹 Basic Usage
+1. Search for a word in a file
+grep "error" logfile.log
+
+2. Case-insensitive search
+grep -i "error" logfile.log
+
+3. Search recursively in all files of a directory
+grep -r "error" /var/log/
+
+4. Count matches
+grep -c "error" logfile.log
+
+5. Show line numbers with matches
+grep -n "error" logfile.log
+
+🔹 Filtering
+6. Show only matching part of the line
+grep -o "error" logfile.log
+
+7. Show lines NOT matching pattern
+grep -v "error" logfile.log
+
+8. Match multiple patterns
+grep -E "error|warning" logfile.log
+
+🔹 Regex Examples
+9. Lines starting with "Error"
+grep "^Error" logfile.log
+
+10. Lines ending with ".log"
+grep "\.log$" logfile.log
+
+11. Match digits
+grep "[0-9]" logfile.log
+
+12. Match whole word only
+grep -w "error" logfile.log
+
+🔹 Advanced
+13. Search in multiple files
+grep "error" file1.txt file2.txt
+
+14. Highlight matches (default in many distros)
+grep --color=auto "error" logfile.log
+
+15. Use with pipes (common in DevOps)
+dmesg | grep "usb"
+
+kubectl logs pod-name | grep "error"
+
+16. Show 2 lines before and after match
+grep -C 2 "error" logfile.log
+
+17. Show 3 lines before match
+grep -B 3 "error" logfile.log
+
+18. Show 3 lines after match
+grep -A 3 "error" logfile.log
+
+🔹 Common DevOps Use Cases
+
+Log monitoring (grep -i "fail" /var/log/syslog)
+
+Debugging Kubernetes/Docker logs (kubectl logs | grep timeout)
+
+Filtering config files for keywords
+
+Quick validation in CI/CD pipelines
+
+👉 Shortcut in one word:
+grep = search 🔍
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 # 🐧 Linux Text Processing Commands (AWK, SED, GREP)
 
 This guide covers **three powerful Linux tools** — `awk`, `sed`, and `grep`.  
