@@ -52,6 +52,6 @@ git stash clear
 # You’re working on a file but need to switch branches
 git stash        # save unfinished work
 git checkout main
-git pull         # update branch
+git pull        
 git checkout feature-branch
 git stash pop    # get back your work
