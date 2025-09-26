@@ -91,3 +91,55 @@ Containers are ephemeral (data lost when stopped).
 Volumes store data outside the container lifecycle.
 
 docker run -v /host/path:/container/path myapp
+
+
+# 🐳 Docker Image vs Docker Container
+
+## 🔹 Docker Image
+- A **read-only template** that contains:
+  - Application code
+  - Dependencies
+  - Runtime environment
+  - Configuration files
+- Blueprint used to create containers.
+- Immutable (cannot be changed once built).
+- Can be versioned, shared, and reused (e.g., Docker Hub).
+
+👉 Think of an image as a **class** in programming.
+
+Example:
+```bash
+docker pull nginx
+docker images
+🔹 Docker Container
+A running instance of an image.
+
+Lightweight and isolated environment.
+
+Has its own filesystem, networking, and processes.
+
+Ephemeral by default (data lost when stopped unless volumes used).
+
+You can create, start, stop, move, or delete containers.
+
+👉 Think of a container as an object created from a class.
+
+Example:
+
+bash
+Copy code
+docker run -d --name mynginx nginx
+docker ps
+🔹 Key Difference
+Aspect	Docker Image	Docker Container
+Definition	Blueprint/template for containers	Running instance of an image
+State	Static (read-only)	Dynamic (can start/stop/remove)
+Mutability	Immutable	Writable (changes stored as new layer)
+Storage	Stored in registry (e.g., Docker Hub)	Runs on host system
+
+✅ Summary
+Image = Template
+
+Container = Running Instance
+
+One image can create multiple containers.
