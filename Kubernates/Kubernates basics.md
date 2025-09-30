@@ -160,3 +160,79 @@ kubectl get pods
 # Describe a pod
 kubectl describe pod nginx
 
+
+🔹 6. AWS Setup for Hands-On
+
+Kubernetes can be deployed on AWS EKS (Elastic Kubernetes Service).
+
+EKS handles control plane; you manage worker nodes.
+
+Setup steps (high-level):
+
+Install AWS CLI & eksctl.
+
+Create an EKS cluster:
+
+eksctl create cluster --name my-cluster --region us-east-1
+
+
+Configure kubectl to use this cluster:
+
+aws eks update-kubeconfig --region us-east-1 --name my-cluster
+
+
+Verify:
+
+kubectl get nodes
+
+🔹 7. What is Kind Cluster?
+
+Kind (Kubernetes in Docker) = tool for running Kubernetes locally using Docker.
+
+Good for learning, testing, and CI/CD.
+
+Lightweight alternative to Minikube.
+
+Creates clusters inside Docker containers.
+
+🔹 8. Kind Setup on Local
+Install Kind
+# Linux/macOS
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.23.0/kind-linux-amd64
+chmod +x ./kind
+mv ./kind /usr/local/bin/kind
+
+# Windows (PowerShell)
+choco install kind
+
+🔹 9. Kind Cluster Creation
+✅ Create a Cluster
+kind create cluster --name demo-cluster
+
+✅ List Clusters
+kind get clusters
+
+✅ Use kubectl with Kind
+kubectl cluster-info --context kind-demo-cluster
+kubectl get nodes
+
+✅ Delete a Cluster
+kind delete cluster --name demo-cluster
+
+📌 Quick Summary
+
+Kubernetes = container orchestration platform.
+
+Born at Google → CNCF project.
+
+Solves scaling, load balancing, self-healing.
+
+Monolithic ❌ vs Microservices ✅ → Kubernetes makes microservices manageable.
+
+Architecture: Control Plane + Worker Nodes.
+
+Tools: kubectl for commands, kind for local clusters.
+
+Cloud: AWS EKS for production-ready managed clusters.
+
+Local: Kind for dev & testing clusters.
