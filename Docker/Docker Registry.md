@@ -10,6 +10,7 @@
 
 ---
 
+
 ## 🔹 2. Components
 - **Registry** → Stores images (e.g., Docker Hub, private registry).  
 - **Repository** → Collection of images with the same name but different tags.  
