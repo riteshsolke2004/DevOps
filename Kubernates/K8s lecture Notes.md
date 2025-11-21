@@ -1,8 +1,8 @@
-Kubernetes — Complete Lecture Notes & Cheat Sheet
+🚀 Kubernetes — Complete Lecture Notes & Cheat Sheet
 
-Ready-to-use README for a learning repo. Covers core concepts, architecture, YAML examples, kubectl commands, storage, networking, scaling, security, examples & best practices.
+Ready-to-use README for learning Kubernetes. Covers core concepts, architecture, YAML examples, kubectl commands, storage, networking, scaling, security, observability, and best practices.
 
-Table of contents
+📚 Table of Contents
 
 Introduction / Overview
 
@@ -46,224 +46,247 @@ Example Projects / Ideas
 
 Commands Cheat Sheet
 
-YAML Examples (copy-ready)
+YAML Examples
 
 Best Practices
 
 Summary / Key Takeaways
 
-Introduction / Overview
+🧭 Introduction / Overview
 
-Kubernetes (K8s) is the open-source system to orchestrate containerized apps: deploy, scale, self-heal, and expose services. You declare desired state in YAML -> K8s controller loops reconcile actual state to match it. This README turns lecture concepts into a practical quick-reference.
+Kubernetes (K8s) is an open-source system to automate deployment, scaling, and management of containerized applications.
 
-Architecture
+You declare your desired state using YAML
 
-K8s has two logical planes:
+Kubernetes continuously reconciles actual → desired state
 
-Control plane (master)
+Handles failures, autoscaling, networking, storage, and rollouts
 
-kube-apiserver — central API (all requests go here).
+These notes convert lecture content into a practical, developer-friendly reference.
 
-etcd — distributed key-value store (cluster state).
+🏗 Architecture
+Control Plane
 
-kube-scheduler — which node runs which Pods.
+kube-apiserver — central API endpoint
 
-kube-controller-manager — controllers that reconcile resources.
+etcd — distributed key-value store for cluster state
 
-Worker nodes
+kube-scheduler — assigns Pods to nodes
 
-kubelet — agent that runs Pods.
+kube-controller-manager — runs controllers (replicas, endpoints, nodes)
 
-container runtime — containerd / dockerd, etc.
+Worker Nodes
 
-kube-proxy — implements Service networking rules.
+kubelet — manages Pods on the node
 
-Core Concepts
-Pods
+container runtime — Docker/containerd
 
-Smallest deployable unit. One or more containers sharing network and storage.
+kube-proxy — networking rules for Services
 
-Ephemeral: don't use bare Pods for production; use higher-level controllers.
+🔑 Core Concepts
+🌱 Pods
 
-Namespaces
+Smallest deployable unit
 
-Virtual clusters within a cluster. Use for dev, staging, prod, or teams.
+Can contain 1+ containers
 
-Isolate resources, apply quota & RBAC per namespace.
+Share network + storage
 
-Deployments & ReplicaSets
+Ephemeral → use Deployments for production
 
-Deployment manages stateless Pods + rolling updates + rollback.
+🗂 Namespaces
 
-ReplicaSet ensures N replicas of a Pod template are running (usually managed by Deployment).
+Logical isolation inside cluster
 
-StatefulSet / DaemonSet / Jobs
+Separate dev/stage/prod
 
-StatefulSet — stateful apps needing stable network IDs & storage (databases).
+Apply RBAC & quotas per namespace
 
-DaemonSet — run one Pod on each (or selected) node (logging, node agents).
+📦 Deployments / ReplicaSets
 
-Job — run-to-completion workload; CronJob — scheduled Job.
+Deployment handles:
 
-Labels & Selectors
+Rolling updates
 
-Attach key: value labels to objects.
+Rollbacks
 
-Use selectors in Services, Deployments to choose Pods.
+Scaling
 
-Storage
-PV / PVC / StorageClass
+ReplicaSet ensures fixed # of Pods
 
-PersistentVolume (PV) — cluster-level resource representing physical storage.
+Deployments manage ReplicaSets behind the scenes
 
-PersistentVolumeClaim (PVC) — user request for storage.
+🧱 StatefulSets / DaemonSets / Jobs
+Resource	Purpose
+StatefulSet	Databases, apps needing stable identity/storage
+DaemonSet	One Pod on every node (logs, monitoring agents)
+Job	Run-to-completion tasks
+CronJob	Scheduled Jobs
+🏷 Labels & Selectors
 
-StorageClass — dynamic provisioning rules (fast/slow, gp2, etc).
+Attach labels like app: frontend
+Used by:
 
-Pattern:
-
-Create StorageClass (optional for dynamic provisioning).
-
-Create PVC (claims a PV or requests dynamic PV).
-
-Mount PVC into Pod spec under volumes.
-
-Networking
 Services
 
-Provide stable access to ephemeral Pods.
+Deployments
 
-Types:
+HPA
 
-ClusterIP (default) — internal-only.
+NetworkPolicies
 
-NodePort — expose service on each node externally.
+💾 Storage
+PV / PVC / StorageClass
 
-LoadBalancer — provision cloud LB.
+PV — actual storage resource
 
-ExternalName — alias to external DNS.
+PVC — user request for storage
 
-Service → selects Pods by label selector and load-balances.
+StorageClass — defines type (fast/slow, SSD/HDD)
 
+Workflow:
+
+Define StorageClass (optional)
+
+User creates PVC
+
+PV is bound or dynamically created
+
+Mount PVC into Pod
+
+🌐 Networking
+Services
+
+Stable access to Pods.
+
+Type	Use
+ClusterIP	internal traffic
+NodePort	exposes port externally
+LoadBalancer	cloud LBs
+ExternalName	DNS alias
 Ingress
 
-Routes HTTP(S) traffic to Services based on host/path rules.
+HTTP routing
 
-Requires an Ingress Controller (NGINX, Traefik, etc).
+Host/path-based routing
 
-Configuration & Secrets
+Requires Ingress Controller (NGINX / Traefik)
 
-ConfigMap — store non-sensitive config (env vars, config files).
+⚙ Configuration & Secrets
+ConfigMaps
 
-Secret — store sensitive data (passwords, TLS keys). Can be mounted as files or env vars. Base64 encoded in YAML.
+Store non-sensitive config.
 
-Health Checks (Probes)
+Secrets
 
-Liveness probe — if fails, kubelet restarts container.
+Store sensitive data (passwords, TLS certs).
+Base64 encoded in YAML.
 
-Readiness probe — if fails, container removed from Service endpoints (no traffic).
+❤️ Health Checks (Probes)
+Probe	Purpose
+Liveness	restart if unhealthy
+Readiness	remove from Service endpoints
+Startup	allow slow boot apps
 
-Startup probe — allow longer start-up period for heavy apps.
+Probes:
 
-Examples use httpGet, tcpSocket, or exec.
+httpGet
 
-Scaling & Autoscaling
+tcpSocket
 
-Manual scale: kubectl scale deployment/my-deploy --replicas=5.
+exec
 
-Horizontal Pod Autoscaler (HPA): scales replicas based on CPU/memory/custom metrics.
+📈 Scaling & Autoscaling
+Manual scaling:
+kubectl scale deployment myapp --replicas=5
 
-Vertical Pod Autoscaler (VPA): adjusts resource requests/limits.
+Horizontal Pod Autoscaler (HPA)
 
-Cluster Autoscaler: adds/removes nodes based on scheduling needs (cloud provider).
+Scales based on CPU/memory/custom metrics.
 
-Scheduling & Node Placement
+Vertical Pod Autoscaler (VPA)
 
-Node labels & nodeAffinity — schedule Pods to specific nodes.
+Adjusts resource requests/limits.
 
-Taints & tolerations — repel Pods from certain nodes unless they tolerate the taint.
+Cluster Autoscaler
 
-Pod anti-affinity — spread Pods across nodes.
+Adds/removes nodes automatically (cloud).
 
-Security & RBAC
+🧭 Scheduling & Node Placement
 
-Use ServiceAccounts for Pods to access API.
+Node labels + nodeAffinity
 
-RBAC: Roles / ClusterRoles + RoleBindings / ClusterRoleBindings for fine-grained permissions.
+Taints & tolerations
 
-Recommendations: least privilege, network policies, scan images, imagePullPolicy set properly.
+Pod anti-affinity to spread replicas
 
-Observability / Monitoring
+🔐 Security & RBAC
 
-Logs: kubectl logs (or centralized via Fluentd/Logstash).
+ServiceAccounts
 
-Metrics: Prometheus + Grafana for CPU/memory/Custom metrics.
+Roles / RoleBindings
 
-Tracing: Jaeger/Zipkin.
+ClusterRoles / ClusterRoleBindings
 
-Alerts: Prometheus Alertmanager.
+Least privilege
 
-Example Projects / Ideas
+NetworkPolicies
 
-3-tier web app: nginx frontend → backend service → PostgreSQL StatefulSet.
+Image scanning
 
-Chat app (frontend + websocket backend + Redis).
+📊 Observability / Monitoring
 
-CI/CD demo: GitHub Actions → build image → push to registry → apply kubectl manifests.
+Logs: kubectl logs
 
-Production EKS demo: set HPA & Cluster Autoscaler + monitoring + IAM for service accounts.
+Metrics: Prometheus
 
-Commands Cheat Sheet
+Dashboards: Grafana
 
-Common commands to keep handy:
+Tracing: Jaeger / Zipkin
 
-# apply manifests
+Alerts: Alertmanager
+
+🌟 Example Projects / Ideas
+
+3-tier app (Nginx → API → PostgreSQL StatefulSet)
+
+Chat app with Redis
+
+CI/CD pipeline with GitHub Actions → k8s deploy
+
+EKS demo with autoscaling + monitoring
+
+🧩 Commands Cheat Sheet
+Apply configs
 kubectl apply -f <file.yaml>
 
-# view resources
+View resources
 kubectl get pods
-kubectl get pods -n <namespace>
 kubectl get deployments
 kubectl get svc
 kubectl get pv,pvc
 kubectl get nodes
 
-# describe & inspect
-kubectl describe pod <pod-name>
-kubectl describe deployment <deployment-name>
+Logs & shell
+kubectl logs <pod>
+kubectl exec -it <pod> -- sh
 
-# logs & exec
-kubectl logs <pod-name>            # logs for first container
-kubectl logs <pod-name> -c <c>     # logs for container c
-kubectl exec -it <pod> -- /bin/sh
-
-# scale
+Scale
 kubectl scale deployment myapp --replicas=5
 
-# rolling update (change image)
-kubectl set image deployment/my-deploy my-container=myimage:tag
+Update image
+kubectl set image deployment/myapp app=myimage:v2
 
-# delete
+Delete
 kubectl delete -f <file.yaml>
-kubectl delete pod <pod-name>
+kubectl delete pod <pod>
 
-# namespaces
+Namespace
 kubectl create namespace dev
 kubectl get all -n dev
 
-# resource usage
-kubectl top nodes
-kubectl top pods
-
-# port-forward (for local dev)
-kubectl port-forward svc/my-service 8080:80
-
-# HPA
-kubectl autoscale deployment my-deploy --cpu-percent=50 --min=2 --max=10
-kubectl get hpa
-
-YAML Examples (copy-ready)
-Pod (simple)
+🧾 YAML Examples
+Pod
 apiVersion: v1
 kind: Pod
 metadata:
@@ -297,21 +320,8 @@ spec:
           image: nginx:1.23
           ports:
             - containerPort: 80
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "128Mi"
-            limits:
-              cpu: "500m"
-              memory: "256Mi"
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 5
-            periodSeconds: 10
 
-Service (ClusterIP)
+Service
 apiVersion: v1
 kind: Service
 metadata:
@@ -320,12 +330,11 @@ spec:
   selector:
     app: demo
   ports:
-    - protocol: TCP
-      port: 80
+    - port: 80
       targetPort: 80
   type: ClusterIP
 
-Ingress (basic)
+Ingress
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -343,7 +352,7 @@ spec:
                 port:
                   number: 80
 
-PersistentVolume & PersistentVolumeClaim (hostPath example for demo)
+PV & PVC
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -351,37 +360,19 @@ metadata:
 spec:
   capacity:
     storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
+  accessModes: [ReadWriteOnce]
   hostPath:
     path: /mnt/data/demo
-
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: demo-pvc
 spec:
-  accessModes:
-    - ReadWriteOnce
+  accessModes: [ReadWriteOnce]
   resources:
     requests:
       storage: 1Gi
-
-
-Mount PVC into a Pod:
-
-spec:
-  volumes:
-    - name: data
-      persistentVolumeClaim:
-        claimName: demo-pvc
-  containers:
-    - name: app
-      image: myapp:latest
-      volumeMounts:
-        - mountPath: /data
-          name: data
 
 ConfigMap & Secret
 apiVersion: v1
@@ -391,7 +382,6 @@ metadata:
 data:
   APP_ENV: "dev"
   LOG_LEVEL: "info"
-
 ---
 apiVersion: v1
 kind: Secret
@@ -399,31 +389,15 @@ metadata:
   name: demo-secret
 type: Opaque
 data:
-  DB_PASSWORD: cGFzc3dvcmQ=   # base64 of 'password'
+  DB_PASSWORD: cGFzc3dvcmQ=
 
-
-Use as env in Pod:
-
-env:
-  - name: APP_ENV
-    valueFrom:
-      configMapKeyRef:
-        name: demo-config
-        key: APP_ENV
-  - name: DB_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: demo-secret
-        key: DB_PASSWORD
-
-HPA (Horizontal Pod Autoscaler)
+HPA
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: demo-hpa
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
     kind: Deployment
     name: demo-deployment
   minReplicas: 2
@@ -436,60 +410,34 @@ spec:
           type: Utilization
           averageUtilization: 50
 
-RBAC (Role + RoleBinding example)
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: pod-reader
-  namespace: demo
-rules:
-  - apiGroups: [""]
-    resources: ["pods"]
-    verbs: ["get", "watch", "list"]
+🧠 Best Practices
 
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: read-pods
-  namespace: demo
-subjects:
-  - kind: User
-    name: alice
-    apiGroup: rbac.authorization.k8s.io
-roleRef:
-  kind: Role
-  name: pod-reader
-  apiGroup: rbac.authorization.k8s.io
+Don't run bare Pods — use Deployments/StatefulSets
 
-Best Practices
+Always define resource requests & limits
 
-Use Deployments / StatefulSets instead of a single Pod.
+Use readiness + liveness probes
 
-Set resource requests & limits for every container.
+Store config in ConfigMaps / Secrets, not images
 
-Use readiness and liveness probes.
+Use RBAC + Namespaces for security
 
-Keep Config and Secrets out of images; inject them at runtime.
+Set up full observability stack
 
-Use Namespaces and RBAC to enforce least privilege.
+Use rolling updates with easy rollbacks
 
-Prefer rolling updates and keep rollbacks ready.
+Scan images and use signed images
 
-Implement observability (metrics + logs + tracing).
+🔥 Summary / Key Takeaways
 
-Keep cluster nodes small enough to scale but large enough to reduce scheduling overhead.
+Kubernetes abstracts containers into Pods and higher controllers
 
-Use image scanning and signed images where possible.
+YAML + kubectl = main workflow
 
-Summary / Key Takeaways
+Services + Ingress handle traffic
 
-Kubernetes abstracts containers into Pods and provides robust patterns for stateless and stateful workloads.
+PV/PVC handle persistent storage
 
-YAML manifests + kubectl = the core workflow.
+Autoscaling and probes → resilient apps
 
-Services & Ingress handle networking; PV/PVC handle persistent storage.
-
-Autoscaling & probes make apps resilient and responsive.
-
-Security, monitoring, and proper scheduling are essential for production readiness.
+Security + Monitoring = production-ready clusters
