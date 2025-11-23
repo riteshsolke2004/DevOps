@@ -9,7 +9,7 @@
   - Deployment
   - Scaling
   - Load balancing
-  - Self-healing of containers  
+  - Self-healing of containers 
 
 ### Key Concepts
 - **Cluster** → A set of nodes (machines) managed by Kubernetes.  
