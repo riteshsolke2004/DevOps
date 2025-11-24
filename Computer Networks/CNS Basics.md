@@ -3,6 +3,7 @@
 
 A computer network is a system where multiple computing devices (servers, laptops, IoT devices, etc.) communicate and share resources (data, applications, services).
 
+
 🔹 Types of Networks:
 
 LAN (Local Area Network) – Office, Home setup.
