@@ -11,6 +11,7 @@ By default, Docker creates an isolated network environment for containers.
 - Networking is handled by the **Docker daemon**.
 - Uses **Linux kernel features** like namespaces, veth pairs, and iptables.
 
+
 ---
 
 ## 🔹 Types of Docker Networks
