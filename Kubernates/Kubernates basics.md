@@ -20,7 +20,6 @@
 - **Namespace** → Logical separation inside a cluster.  
 
 ---
-
 ## 🔹 2. History of Kubernetes
 - Born inside **Google** (used internally as Borg & Omega).  
 - Open-sourced in **2014**, donated to CNCF.  
