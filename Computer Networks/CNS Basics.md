@@ -1,6 +1,5 @@
 🖧 Computer Networking for DevOps Engineers
 1. What is Computer Network?
-
 A computer network is a system where multiple computing devices (servers, laptops, IoT devices, etc.) communicate and share resources (data, applications, services).
 
 
