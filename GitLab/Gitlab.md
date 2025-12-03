@@ -84,7 +84,6 @@ Enter values:
 URL: http://your-server-ip/
 Token: from project -> Settings -> CI/CD -> Runners
 
-
 Start Runner:
 
 sudo gitlab-runner start
