@@ -10,6 +10,7 @@ Whether you are editing configuration files, debugging YAML, managing Kubernetes
 - `CheatSheet.pdf` (optional) → Printable one-page cheat sheet (to be added).
 - Example configs (`examples/`) → Sample YAML, JSON, and config files to practice.
 
+
 ---
 
 ## ⚡ Why Vim for DevOps?
