@@ -41,7 +41,6 @@ Run a private registry container:
 ```bash
 docker run -d -p 5000:5000 --name registry registry:2
 
-
 6. Using Docker Registry
 ✅ Pull an Image from Docker Hub
 docker pull nginx:latest
