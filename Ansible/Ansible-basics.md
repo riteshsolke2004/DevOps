@@ -12,7 +12,6 @@ It helps automate tasks across multiple servers using simple **YAML-based Playbo
 No agents, low effort, big results — that’s the vibe.
 
 ---
-
 ## 🚀 Why Use Ansible?
 | Feature | Reason it matters |
 |--------|-------------------|
