@@ -71,6 +71,7 @@ Layer	Function	Examples	DevOps Angle
 2. Data Link	MAC addressing, switching	Ethernet, ARP	Network switches, ARP cache
 1. Physical	Transmission medium	Fiber, cables	Cloud abstracts this, but matters in on-prem
 
+
 👉 DevOps Relevance:
 When debugging, map the issue to the layer:
 
